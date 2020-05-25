@@ -17,6 +17,7 @@ export interface GameState {
   session: string;
 
   // Game Data
+  id: string;
   guessing: boolean;
   host: boolean;
   playerState: PlayerState[];
@@ -64,6 +65,14 @@ export interface GameActions {
   // Lobby Actions
   join: (name: string, code: string) => void;
   create: (name: string) => void;
+
+  // Game Actions
+  setGuessing: (id: string) => void;
+  setWord: (word: string) => void;
+  bootInactive: () => void;
+  startRound: () => void;
+  guessPlayer: (id: string) => void;
+  reset: () => void;
 }
 
 export type GameStore = Store<GameState, GameActions>;
@@ -83,10 +92,12 @@ const actions = {
 
   // Tries to reestablish a session the server holds for us
   neogotiateSession(store: GameStore) {
-    const { session } = store.state;
+    const session = sessionStorage.getItem("totpal-session") ?? undefined;
+    console.log("SESSION", session);
 
     store.actions.setPartialState({
       connected: true,
+      session,
     });
 
     if (session) {
@@ -103,19 +114,19 @@ const actions = {
 
   // Sends data
   send(store: GameStore, data: object) {
+    console.log("->", data);
     socket.send(JSON.stringify(data));
   },
 
   // Handles messages
   handleMessage(store: GameStore, event: MessageEvent) {
-    console.log(JSON.parse(event.data));
+    console.log("<-", JSON.parse(event.data));
 
     const message: { action: string; [key: string]: any } = JSON.parse(
       event.data
     );
 
     if (message["error-when"]) {
-      console.log("Error!");
       store.actions.setPartialState({ error: message.error });
     }
 
@@ -150,8 +161,6 @@ const actions = {
       [key: string]: any;
     }
   ) {
-    console.log(`BROADCAST ${message.broadcastType}`, message);
-
     switch (message.broadcastType) {
       case "state-update": {
         const { states, selectedWord, points } = message;
@@ -195,6 +204,7 @@ const actions = {
 
   //  Lobby Actions
   join(store: GameStore, name: string, code: string) {
+    store.actions.setPartialState({ name, gameCode: code });
     store.actions.send({
       scope: "global",
       action: "set-name",
@@ -207,6 +217,7 @@ const actions = {
     });
   },
   create(store: GameStore, name: string) {
+    store.actions.setPartialState({ name });
     store.actions.send({
       scope: "global",
       action: "set-name",
@@ -285,6 +296,7 @@ const initalState: GameState = {
   session: sessionStorage.getItem("pd-session") || "",
 
   // Game Data
+  id: "",
   guessing: false,
   host: false,
   playerState: [],
@@ -298,7 +310,7 @@ const initalState: GameState = {
 export const socket = new WebSocket(
   process.env["NODE_ENV"] === "production"
     ? "wss://pd-api.bren.app:8888"
-    : "ws://localhost:8888"
+    : "ws://192.168.1.15:8888"
 );
 
 function initalize(store: GameStore) {
@@ -306,7 +318,9 @@ function initalize(store: GameStore) {
   socket.onmessage = (ev: MessageEvent) => store.actions.handleMessage(ev);
 
   socket.onerror = (ev) => {
-    store.actions.setPartialState({ error: ev.toString() });
+    store.actions.setPartialState({
+      error: "Could not connect to Game Server!",
+    });
   };
 
   socket.onclose = () => {
@@ -314,4 +328,9 @@ function initalize(store: GameStore) {
   };
 }
 
-export default globalHook(React, initalState, actions);
+export default globalHook<GameState, GameActions>(
+  React,
+  initalState,
+  actions,
+  initalize
+);
