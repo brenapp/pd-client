@@ -1,6 +1,8 @@
 import React, { Fragment } from "react";
 import Splash from "./routes/Splash";
-import { useRoutes } from "hookrouter";
+import { useRoutes, navigate, usePath } from "hookrouter";
+import useGameState from "./services/game";
+import Game from "./routes/Game";
 
 /**
  * Routing
@@ -13,20 +15,48 @@ const routes = {
   "/join/:code": (params: any) => (
     <Splash code={params.code} enteringCode={true} />
   ),
+  "/game": () => <Game />,
 };
 
 function App() {
   const location = useRoutes(routes);
+  const path = usePath();
+  const [state] = useGameState();
+
+  // Handle connections
+  if (state.position === "game") {
+    navigate("/game");
+  } else {
+    navigate("/");
+  }
 
   return (
     <Fragment>
-      <header className="App-Header"></header>
-      <main>{location}</main>
-      <footer>
-        <div className="angled1 green"></div>
-        <div className="angled2 purple"></div>
-        <div className="bottom green"></div>
-      </footer>
+      <header
+        className={state.position === "game" ? "App-Header big" : "App-Header"}
+      >
+        {state.position === "game" ? (
+          <Fragment>
+            <p>{state.name}</p>
+            <p>{state.gameCode}</p>
+          </Fragment>
+        ) : null}
+      </header>
+
+      {state.error || !state.connected ? (
+        <div className="toast">
+          <span className={state.error ? "error" : ""}>
+            {state.error ? state.error : "Connecting..."}
+          </span>
+        </div>
+      ) : null}
+
+      <main className={path.slice(1)}>{location}</main>
+      {/* <footer>
+          <div className="angled1 green"></div>
+          <div className="angled2 purple"></div>
+          <div className="bottom green"></div>
+        </footer> */}
     </Fragment>
   );
 }
