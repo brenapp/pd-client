@@ -1,6 +1,5 @@
 import React, { Fragment, useState } from "react";
 import useGameState, { RoundProgression } from "../services/game";
-import game from "../services/game";
 
 export default () => {
   const [state, actions] = useGameState();
@@ -8,7 +7,6 @@ export default () => {
 
   // Set the title
   let title;
-  let subtitle;
 
   switch (state.stage) {
     case RoundProgression.RESEARCH: {
@@ -49,11 +47,19 @@ export default () => {
           )}
         </header>
 
-        {state.playerState.map((player) => (
-          <p>
-            {player.name} {player.active ? null : "(inactive)"}
-          </p>
-        ))}
+        <ul className="block">
+          {state.playerState.map((player) => (
+            <li
+              className={
+                state.guessing && state.stage === RoundProgression.INVESTIGATION
+                  ? "clickable"
+                  : ""
+              }
+            >
+              {player.name} {player.active ? null : "(inactive)"}
+            </li>
+          ))}
+        </ul>
       </div>
       {!state.guessing ? (
         <Fragment>
