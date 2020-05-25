@@ -3,6 +3,7 @@
  */
 
 import React, { Fragment, useState } from "react";
+import useGameState from "../services/game";
 
 export interface SplashScreenProps {
   code?: string;
@@ -10,18 +11,38 @@ export interface SplashScreenProps {
 }
 
 export default ({ code, enteringCode }: SplashScreenProps) => {
-  const [state, setState] = useState({ code, enteringCode });
+  const [localState, setLocalState] = useState({
+    code,
+    enteringCode,
+    name: "",
+  });
+  const [, actions] = useGameState();
 
   function handleJoin(e: any) {
     e.preventDefault();
-    if (state.enteringCode) {
-      alert(`Join ${state.code}`);
+    if (localState.enteringCode) {
+      if (!localState.code || localState.code.length !== 4) {
+        actions.setPartialState({
+          error: "Make sure you've entered the correct 4-digit code!",
+        });
+        return;
+      } else {
+        actions.setPartialState({ error: "" });
+      }
+
+      actions.join(localState.name, localState.code);
     } else {
-      setState({
+      setLocalState({
+        ...localState,
         code,
         enteringCode: true,
       });
     }
+  }
+
+  function handleCreate(e: any) {
+    e.preventDefault();
+    actions.create(localState.name);
   }
 
   function formatCode(code: string) {
@@ -31,8 +52,9 @@ export default ({ code, enteringCode }: SplashScreenProps) => {
       .slice(0, 4);
   }
 
-  if (state.code && !state.enteringCode) {
-    setState({
+  if (localState.code && !localState.enteringCode) {
+    setLocalState({
+      ...localState,
       enteringCode: true,
       code,
     });
@@ -46,25 +68,41 @@ export default ({ code, enteringCode }: SplashScreenProps) => {
       </h1>
 
       <div className="center-column">
-        <button className="purple" onClick={handleJoin}>
-          Join Game
-        </button>
-        {state.enteringCode ? (
+        <input
+          className="centered green"
+          type="text"
+          value={localState.name}
+          placeholder="Nickname"
+          onInput={(ev) =>
+            setLocalState({
+              ...localState,
+              name: ev.currentTarget.value.toUpperCase(),
+            })
+          }
+        />
+
+        {localState.enteringCode ? (
           <input
             className="centered"
             type="text"
-            value={state.code}
+            value={localState.code}
             placeholder="Game Code"
             onInput={(ev) =>
-              setState({
+              setLocalState({
+                ...localState,
                 code: formatCode(ev.currentTarget.value),
-                enteringCode: true,
               })
             }
           />
         ) : (
-          <button className="green">Create Game</button>
+          <button className="green" onClick={handleCreate}>
+            Create Game
+          </button>
         )}
+
+        <button className="purple" onClick={handleJoin}>
+          Join Game
+        </button>
       </div>
     </Fragment>
   );
