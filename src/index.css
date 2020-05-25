@@ -290,10 +290,11 @@ div.card {
   background-color: var(--white);
   border-radius: 8px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  margin-bottom: 16px;
 }
 
 div.card > *:not(header) {
-  margin: 16px;
+  margin: 0 16px;
 }
 
 div.card header {
@@ -318,4 +319,22 @@ div.card header *:first-child {
 
 div.card header.green {
   background-color: var(--green-1);
+}
+
+ul.block {
+  padding: 0;
+  margin: 0;
+}
+
+ul.block li {
+  list-style-type: none;
+  padding: 16px;
+}
+
+ul.block li.clickable {
+  cursor: pointer;
+}
+
+ul.block li.clickable:hover {
+  background: var(--gray-3);
 }
