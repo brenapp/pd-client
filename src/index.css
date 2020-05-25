@@ -1,13 +1,186 @@
-body {
+body,
+html {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  color: var(--gray-1);
+  height: 100%;
+  min-height: 100vh;
+}
+
+#root {
+  height: 100%;
+}
+
+:root {
+  --green-1: #16a085;
+  --green-2: #1abc9c;
+  --purple-1: #786fa6;
+  --purple-2: #9b59b6;
+  --gray-1: #4f4f4f;
+  --gray-2: #afafaf;
+  --white: #fff;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+.App-Header {
+  position: absolute;
+  height: 18px;
+  background: var(--gray-1);
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 18px;
+}
+
+main {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 8px;
+}
+
+footer {
+  position: relative;
+  background: var(--green-1);
+  z-index: -1;
+}
+
+footer .angled1 {
+  position: fixed;
+  height: 50vh;
+  width: 180vw;
+  background-color: var(--green-1);
+  bottom: -30vh;
+  left: -20vh;
+  transform: rotate(20deg);
+}
+
+footer .angled2 {
+  position: fixed;
+  height: 40vh;
+  width: 130vw;
+  background-color: var(--purple-1);
+  bottom: -10vh;
+  left: 0;
+  transform: rotate(-20deg);
+  z-index: -1;
+}
+
+footer .bottom {
+  position: fixed;
+  height: 18vw;
+  width: 70vw;
+  background-color: var(--green-1);
+  bottom: -10vh;
+  left: 0;
+}
+
+/** Utility **/
+h1.title {
+  margin-top: 64px;
+  text-align: center;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: 400;
+  font-size: 3.5rem;
+}
+
+p.green,
+span.green {
+  color: var(--green-1);
+}
+
+p.purple,
+span.purple {
+  color: var(--purple-1);
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+}
+
+.center-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+button,
+a.button {
+  padding: 24px 48px;
+  width: 100%;
+  max-width: 20rem;
+  margin: 8px 0;
+  border-radius: 8px;
+  border: 1px solid var(--gray-2);
+  background: none;
+  cursor: pointer;
+  font-size: 1.3rem;
+  outline: none;
+}
+
+button.small,
+a.button.small {
+  padding: 8px 16px;
+  width: auto;
+}
+
+button:active,
+a:active {
+  background-color: var(--gray-1);
+}
+
+button.purple,
+a.purple {
+  background: var(--purple-1);
+  border: none;
+  color: var(--white);
+}
+
+button.purple:active,
+a.purple:active {
+  background: var(--purple-2);
+  border: none;
+  color: var(--white);
+}
+
+button.green,
+a.green {
+  background: var(--green-1);
+  border: none;
+  color: var(--white);
+}
+
+button.green:active,
+a.green:active {
+  background: var(--green-2);
+  border: none;
+  color: var(--white);
+}
+
+input {
+  margin-top: 16px;
+  border: 0;
+  border-bottom: 3px solid var(--purple-1);
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--purple-1);
+  outline: none;
+}
+
+input::placeholder {
+  color: var(--purple-1);
+  font-weight: normal;
+}
+
+input.centered {
+  text-align: center;
 }
