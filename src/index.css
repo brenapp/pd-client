@@ -8,6 +8,7 @@ html {
   -moz-osx-font-smoothing: grayscale;
 
   color: var(--gray-1);
+  background-color: var(--gray-3);
   height: 100%;
   min-height: 100vh;
 }
@@ -23,6 +24,8 @@ html {
   --purple-2: #9b59b6;
   --gray-1: #4f4f4f;
   --gray-2: #afafaf;
+  --gray-3: #efefef;
+  --red-1: #ff7979;
   --white: #fff;
 }
 
@@ -41,41 +44,67 @@ code {
   height: 18px;
 }
 
+.App-Header.big {
+  height: 8vh;
+  display: flex;
+  color: #fff;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.App-Header.big p {
+  margin: 0 16px;
+}
+
+.viewport {
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+}
+
 main {
   max-width: 760px;
   margin: 0 auto;
   padding: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+main.game {
+  padding-top: 10vh;
 }
 
 footer {
-  position: relative;
-  background: var(--green-1);
-  z-index: -1;
+  position: absolute;
+  bottom: 0;
+  height: 80vh;
+  width: 100vw;
+  overflow: hidden;
 }
 
 footer .angled1 {
-  position: fixed;
+  position: absolute;
   height: 50vh;
   width: 180vw;
   background-color: var(--green-1);
   bottom: -30vh;
   left: -20vh;
   transform: rotate(20deg);
+  z-index: 1;
 }
 
 footer .angled2 {
-  position: fixed;
+  position: absolute;
   height: 40vh;
   width: 130vw;
   background-color: var(--purple-1);
-  bottom: -10vh;
+  bottom: -20vh;
   left: 0;
   transform: rotate(-20deg);
-  z-index: -1;
 }
 
 footer .bottom {
-  position: fixed;
+  position: absolute;
   height: 18vw;
   width: 70vw;
   background-color: var(--green-1);
@@ -87,9 +116,26 @@ footer .bottom {
 h1.title {
   margin-top: 64px;
   text-align: center;
-  font-family: "Times New Roman", Times, serif;
   font-weight: 400;
   font-size: 3.5rem;
+}
+
+div.toast {
+  position: fixed;
+  top: 5vh;
+  width: 100%;
+  left: 0;
+  text-align: center;
+}
+
+div.toast span {
+  padding: 8px 16px;
+  background: var(--white);
+  border-radius: 8px;
+}
+
+div.toast span.error {
+  background: var(--red-1);
 }
 
 p.green,
@@ -102,6 +148,11 @@ span.purple {
   color: var(--purple-1);
 }
 
+p.white,
+span.white {
+  color: var(--white);
+}
+
 .center {
   display: flex;
   justify-content: center;
@@ -111,6 +162,16 @@ span.purple {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+h1.center,
+h2.center,
+h3.center,
+h4.center,
+h5.center,
+h6.center,
+p.center {
+  text-align: center;
 }
 
 button,
@@ -131,6 +192,8 @@ button.small,
 a.button.small {
   padding: 8px 16px;
   width: auto;
+  text-transform: uppercase;
+  font-size: 1rem;
 }
 
 button:active,
@@ -166,10 +229,28 @@ a.green:active {
   color: var(--white);
 }
 
+button.white,
+a.white {
+  background: var(--white);
+  border: none;
+}
+
+button.white.txt-green,
+a.white.txt-green {
+  color: var(--green-1);
+}
+
+button.white:active,
+a.white:active {
+  background: var(--gray-3);
+  border: none;
+}
+
 input {
-  margin-top: 16px;
+  margin: 16px 0;
   border: 0;
   border-bottom: 3px solid var(--purple-1);
+  background: none;
   font-size: 1.2rem;
   font-weight: bold;
   color: var(--purple-1);
@@ -183,4 +264,58 @@ input::placeholder {
 
 input.centered {
   text-align: center;
+}
+
+input.green {
+  border-bottom: 3px solid var(--green-1);
+  color: var(--green-1);
+}
+
+input.green::placeholder {
+  color: var(--green-1);
+  font-weight: normal;
+}
+
+div.formgroup {
+  display: flex;
+}
+
+div.formgroup input {
+  flex: 1;
+  margin-right: 16px;
+}
+
+div.card {
+  position: relative;
+  background-color: var(--white);
+  border-radius: 8px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+div.card > *:not(header) {
+  margin: 16px;
+}
+
+div.card header {
+  top: 0;
+  width: 100%;
+  left: 0;
+  min-height: 64px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+div.card header * {
+  margin: 0 8px;
+}
+
+div.card header *:first-child {
+  margin-left: 16px;
+}
+
+div.card header.green {
+  background-color: var(--green-1);
 }
