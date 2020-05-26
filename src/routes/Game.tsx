@@ -7,17 +7,22 @@ export default () => {
 
   // Set the title
   let title;
+  let subtitle;
 
   switch (state.stage) {
     case RoundProgression.RESEARCH: {
       if (state.playerState.length < 3) {
-        title = "Waiting For More Players...";
-      } else if (state.playerState.every((player) => player.wordset)) {
+        subtitle = "Waiting For More Players...";
+        title = "";
+      } else if (
+        state.playerState.every((player) => player.wordset || player.guessing)
+      ) {
         title = "Ready to Start!";
       } else {
         const notSubmitted = state.playerState.filter(
-          (player) => !player.wordset
+          (player) => !player.wordset && !player.guessing
         );
+        subtitle = "Research Phase";
         title = `Waiting on ${notSubmitted.map((p) => p.name).join(", ")}...`;
       }
 
@@ -27,6 +32,7 @@ export default () => {
 
   return (
     <Fragment>
+      <h3 className="subtitle center">{subtitle}</h3>
       <h1 className="center">
         <span className="purple">{title}</span>
       </h1>
@@ -60,34 +66,36 @@ export default () => {
             </li>
           ))}
         </ul>
-      </div>
-      {!state.guessing ? (
-        <Fragment>
-          <p>
-            While you're waiting for people to join, go find a{" "}
-            <a
-              href="https://en.wikipedia.org/wiki/Special:Random"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              random Wikipedia
-            </a>{" "}
-            article, and try to remember as much as you can. When you've found
-            one you like, enter the title of the article below
-          </p>
+        {!state.guessing ? (
+          <Fragment>
+            <p>
+              While you're waiting for people to join, go find a{" "}
+              <a
+                href="https://en.wikipedia.org/wiki/Special:Random"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                random Wikipedia
+              </a>{" "}
+              article, and try to remember as much as you can. When you've found
+              one you like, enter the title of the article below
+            </p>
 
-          <div className="formgroup">
-            <input
-              type="text"
-              placeholder="Your Topic"
-              value={localState.topic}
-              onInput={(ev) => setLocalState({ topic: ev.currentTarget.value })}
-              onBlur={() => actions.setWord(localState.topic)}
-            />
-            <button className="small purple">Set Topic</button>
-          </div>
-        </Fragment>
-      ) : null}
+            <div className="formgroup">
+              <input
+                type="text"
+                placeholder="Your Topic"
+                value={localState.topic}
+                onInput={(ev) =>
+                  setLocalState({ topic: ev.currentTarget.value })
+                }
+                onBlur={() => actions.setWord(localState.topic)}
+              />
+              <button className="small purple">Set Topic</button>
+            </div>
+          </Fragment>
+        ) : null}
+      </div>
     </Fragment>
   );
 };
