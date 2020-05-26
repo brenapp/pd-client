@@ -84,6 +84,7 @@ export default () => {
             <div className="formgroup">
               <input
                 type="text"
+                aria-label="Set your topic here"
                 placeholder="Your Topic"
                 value={localState.topic}
                 onInput={(ev) =>

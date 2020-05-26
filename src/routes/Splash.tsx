@@ -71,6 +71,7 @@ export default ({ code, enteringCode }: SplashScreenProps) => {
           type="text"
           value={localState.name}
           placeholder="Nickname"
+          aria-label="Set your nickname"
           onInput={(ev) =>
             setLocalState({
               ...localState,
@@ -85,6 +86,7 @@ export default ({ code, enteringCode }: SplashScreenProps) => {
             type="text"
             value={localState.code}
             placeholder="Game Code"
+            aria-label="The game code"
             onInput={(ev) =>
               setLocalState({
                 ...localState,
