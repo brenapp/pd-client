@@ -52,11 +52,11 @@ function App() {
       ) : null}
 
       <main className={path.slice(1)}>{location}</main>
-      {/* <footer>
-          <div className="angled1 green"></div>
-          <div className="angled2 purple"></div>
-          <div className="bottom green"></div>
-        </footer> */}
+      <footer>
+        <div className="angled1 green"></div>
+        <div className="angled2 purple"></div>
+        <div className="bottom green"></div>
+      </footer>
     </Fragment>
   );
 }

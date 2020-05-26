@@ -67,7 +67,7 @@ main {
   margin: 0 auto;
   padding: 8px;
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 main.game {
@@ -105,11 +105,17 @@ footer .angled2 {
 
 footer .bottom {
   position: absolute;
-  height: 18vw;
+  height: 30vw;
   width: 70vw;
   background-color: var(--green-1);
-  bottom: -10vh;
+  bottom: -30vh;
   left: 0;
+}
+
+@media (max-height: 600px) {
+  footer {
+    display: none;
+  }
 }
 
 /** Utility **/
@@ -118,6 +124,13 @@ h1.title {
   text-align: center;
   font-weight: 400;
   font-size: 3.5rem;
+}
+
+h3.subtitle {
+  text-transform: uppercase;
+  padding: 0;
+  margin: 0;
+  font-weight: lighter;
 }
 
 div.toast {
@@ -197,7 +210,9 @@ a.button.small {
 }
 
 button:active,
-a:active {
+button.disabled,
+a.button:active,
+a.button.disabled {
   background-color: var(--gray-1);
 }
 
