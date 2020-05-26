@@ -11,12 +11,12 @@ export interface SplashScreenProps {
 }
 
 export default ({ code, enteringCode }: SplashScreenProps) => {
+  const [gameState, actions] = useGameState();
   const [localState, setLocalState] = useState({
     code,
     enteringCode,
-    name: "",
+    name: gameState.name,
   });
-  const [, actions] = useGameState();
 
   function handleJoin(e: any) {
     e.preventDefault();
