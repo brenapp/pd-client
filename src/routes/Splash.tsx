@@ -22,9 +22,7 @@ export default ({ code, enteringCode }: SplashScreenProps) => {
     e.preventDefault();
     if (localState.enteringCode) {
       if (!localState.code || localState.code.length !== 4) {
-        actions.setPartialState({
-          error: "Make sure you've entered the correct 4-digit code!",
-        });
+        actions.setError("Make sure you've entered the correct 4-digit code!");
         return;
       } else {
         actions.setPartialState({ error: "" });

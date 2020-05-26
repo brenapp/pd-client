@@ -44,7 +44,7 @@ function App() {
       </header>
 
       {state.error || !state.connected ? (
-        <div className="toast">
+        <div className="toast" role="alert">
           <span className={state.error ? "error" : ""}>
             {state.error ? state.error : "Connecting..."}
           </span>

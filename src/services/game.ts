@@ -51,6 +51,7 @@ export enum RoundProgression {
 
 export interface GameActions {
   setPartialState: (state: Partial<GameState>) => void;
+  setError: (error: string, timeout?: number) => void;
 
   // WebSocket management
   neogotiateSession: () => void;
@@ -84,6 +85,13 @@ export type GameStore = Store<GameState, GameActions>;
 const actions = {
   setPartialState(store: GameStore, state: Partial<GameState>) {
     store.setState({ ...store.state, ...state });
+  },
+
+  setError(store: GameStore, error: string, timeout = 4000) {
+    store.actions.setPartialState({ error });
+    setTimeout(() => {
+      store.actions.setPartialState({ error: "" });
+    }, timeout);
   },
 
   /**
@@ -127,7 +135,7 @@ const actions = {
     );
 
     if (message["error-when"]) {
-      store.actions.setPartialState({ error: message.error });
+      store.actions.setError(message.error);
     }
 
     switch (message.action) {
@@ -318,9 +326,7 @@ function initalize(store: GameStore) {
   socket.onmessage = (ev: MessageEvent) => store.actions.handleMessage(ev);
 
   socket.onerror = (ev) => {
-    store.actions.setPartialState({
-      error: "Could not connect to Game Server!",
-    });
+    store.actions.setError("Could not connect to Game Server!", 3000);
   };
 
   socket.onclose = () => {
