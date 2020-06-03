@@ -190,6 +190,7 @@ p.center {
 
 button,
 a.button {
+  box-sizing: border-box;
   padding: 24px 48px;
   width: 100%;
   max-width: 20rem;
@@ -229,6 +230,13 @@ a.purple:active {
   background: var(--purple-2);
   border: none;
   color: var(--white);
+}
+
+button.purple:focus,
+a.purple:focus,
+button.green:focus,
+a.green:focus {
+  background: var(--gray-1);
 }
 
 button.green,
