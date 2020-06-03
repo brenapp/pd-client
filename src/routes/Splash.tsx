@@ -94,6 +94,7 @@ export default ({ code, enteringCode }: SplashScreenProps) => {
             aria-label="The game code"
             autoFocus
             ref={(input) => (codeInput = input)}
+            onKeyDown={(ev) => (ev.keyCode === 13 ? handleJoin(ev) : null)}
             onChange={(ev) =>
               setLocalState({
                 ...localState,
