@@ -130,6 +130,7 @@ h3.subtitle {
   text-transform: uppercase;
   padding: 0;
   margin: 0;
+  margin-bottom: -8px;
   font-weight: lighter;
 }
 
@@ -305,11 +306,11 @@ div.card {
   background-color: var(--white);
   border-radius: 8px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  margin-bottom: 16px;
+  padding-bottom: 16px;
 }
 
 div.card > *:not(header) {
-  margin: 0 16px;
+  margin: 8px 24px;
 }
 
 div.card header {
@@ -337,7 +338,7 @@ div.card header.green {
 }
 
 ul.block {
-  padding: 0;
+  padding: 16px 0;
   margin: 0;
 }
 
