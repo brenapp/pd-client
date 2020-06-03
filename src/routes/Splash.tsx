@@ -72,7 +72,7 @@ export default ({ code, enteringCode }: SplashScreenProps) => {
           value={localState.name}
           placeholder="Nickname"
           aria-label="Set your nickname"
-          onInput={(ev) =>
+          onChange={(ev) =>
             setLocalState({
               ...localState,
               name: ev.currentTarget.value.toUpperCase(),
@@ -87,7 +87,7 @@ export default ({ code, enteringCode }: SplashScreenProps) => {
             value={localState.code}
             placeholder="Game Code"
             aria-label="The game code"
-            onInput={(ev) =>
+            onChange={(ev) =>
               setLocalState({
                 ...localState,
                 code: formatCode(ev.currentTarget.value),
