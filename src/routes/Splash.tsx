@@ -25,7 +25,7 @@ export default ({ code, enteringCode }: SplashScreenProps) => {
         actions.setError("Make sure you've entered the correct 4-digit code!");
         return;
       } else {
-        actions.setPartialState({ error: "" });
+        actions.setPartialState({ toast: "" });
       }
 
       actions.join(localState.name, localState.code);
