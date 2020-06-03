@@ -20,9 +20,12 @@ export default ({ code, enteringCode }: SplashScreenProps) => {
 
   function handleJoin(e: any) {
     e.preventDefault();
+    codeInput?.focus();
+
     if (localState.enteringCode) {
       if (!localState.code || localState.code.length !== 4) {
         actions.setError("Make sure you've entered the correct 4-digit code!");
+
         return;
       } else {
         actions.setPartialState({ toast: "" });
@@ -58,6 +61,8 @@ export default ({ code, enteringCode }: SplashScreenProps) => {
     });
   }
 
+  let codeInput: HTMLInputElement | null = null;
+
   return (
     <Fragment>
       <h1 className="title">
@@ -88,6 +93,7 @@ export default ({ code, enteringCode }: SplashScreenProps) => {
             placeholder="Game Code"
             aria-label="The game code"
             autoFocus
+            ref={(input) => (codeInput = input)}
             onChange={(ev) =>
               setLocalState({
                 ...localState,
