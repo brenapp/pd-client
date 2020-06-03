@@ -49,7 +49,7 @@ export default ({ code, enteringCode }: SplashScreenProps) => {
   function formatCode(code: string) {
     return code
       .toUpperCase()
-      .replace(/[^0-9A-z]/, "")
+      .replace(/[^0-9]/, "")
       .slice(0, 4);
   }
 
