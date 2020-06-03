@@ -13,7 +13,8 @@ export interface GameState {
 
   // Connection Status
   connected: boolean;
-  error: string;
+  error: boolean;
+  toast: string;
   session: string;
 
   // Game Data
@@ -26,6 +27,7 @@ export interface GameState {
   stage: RoundProgression;
   ownWord: string;
   truth: string;
+  guess: string;
 }
 
 export interface PlayerState {
@@ -52,6 +54,7 @@ export enum RoundProgression {
 export interface GameActions {
   setPartialState: (state: Partial<GameState>) => void;
   setError: (error: string, timeout?: number) => void;
+  setToast: (message: string, timeout?: number) => void;
 
   // WebSocket management
   neogotiateSession: () => void;
@@ -88,9 +91,16 @@ const actions = {
   },
 
   setError(store: GameStore, error: string, timeout = 4000) {
-    store.actions.setPartialState({ error });
+    store.actions.setPartialState({ error: true, toast: error });
     setTimeout(() => {
-      store.actions.setPartialState({ error: "" });
+      store.actions.setPartialState({ error: false, toast: "" });
+    }, timeout);
+  },
+
+  setToast(store: GameStore, toast: string, timeout = 4000) {
+    store.actions.setPartialState({ toast });
+    setTimeout(() => {
+      store.actions.setPartialState({ toast: "" });
     }, timeout);
   },
 
@@ -196,6 +206,7 @@ const actions = {
             ? RoundProgression.GUESS_CORRECT
             : RoundProgression.GUESS_INCORRECT,
           truth: message.truth,
+          guess: message.guess,
         });
 
         break;
@@ -300,7 +311,8 @@ const initalState: GameState = {
 
   // Connection State
   connected: false,
-  error: "",
+  error: false,
+  toast: "",
   session: sessionStorage.getItem("pd-session") || "",
 
   // Game Data
@@ -313,6 +325,7 @@ const initalState: GameState = {
   stage: RoundProgression.RESEARCH,
   ownWord: "",
   truth: "",
+  guess: "",
 };
 
 export const socket = new WebSocket(

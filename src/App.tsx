@@ -43,10 +43,10 @@ function App() {
         ) : null}
       </header>
 
-      {state.error || !state.connected ? (
+      {state.toast || !state.connected ? (
         <div className="toast" role="alert">
           <span className={state.error ? "error" : ""}>
-            {state.error ? state.error : "Connecting..."}
+            {state.toast ? state.toast : "Connecting..."}
           </span>
         </div>
       ) : null}
