@@ -239,6 +239,12 @@ a.green:focus {
   background: var(--gray-1);
 }
 
+button.white:focus,
+a.white:focus {
+  background: var(--gray-1);
+  color: var(--white) !important;
+}
+
 button.green,
 a.green {
   background: var(--green-1);
