@@ -68,10 +68,10 @@ export default () => {
       (player) => player.wordset || player.guessing
     );
 
-    if (ready) {
+    if (ready && state.playerState.length > 2) {
       actions.startRound();
     } else {
-      actions.setError("Everyone needs to be ready!");
+      actions.setError("Not ready to start!");
     }
   }
 
