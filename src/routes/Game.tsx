@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from "react";
-import useGameState, { RoundProgression } from "../services/game";
+import useGameState, { RoundProgression, PlayerState } from "../services/game";
 
 export default () => {
   const [state, actions] = useGameState();
@@ -12,8 +12,8 @@ export default () => {
   switch (state.stage) {
     case RoundProgression.RESEARCH: {
       if (state.playerState.length < 3) {
-        subtitle = "Waiting For More Players...";
-        title = "";
+        subtitle = "Game Code";
+        title = state.gameCode;
       } else if (
         state.playerState.every((player) => player.wordset || player.guessing)
       ) {
@@ -28,7 +28,64 @@ export default () => {
 
       break;
     }
+
+    case RoundProgression.INVESTIGATION: {
+      title = `"${state.selectedWord}"`;
+      subtitle = "The Prompt Is:";
+      break;
+    }
+
+    case RoundProgression.GUESS_CORRECT: {
+      subtitle = "Guessed Correct!";
+      title = `${state.truth} was telling the truth!`;
+      break;
+    }
+
+    case RoundProgression.GUESS_INCORRECT: {
+      subtitle = "Guessed Incorrectly!";
+      title = `${state.truth} was telling the truth!`;
+      break;
+    }
   }
+
+  function validateWord() {
+    const topic = localState.topic;
+
+    if (topic.length < 3) {
+      actions.setError("Make sure you have entered the title of the article!");
+    } else if (topic.includes("wikipedia.org")) {
+      actions.setError(
+        "Make sure you've included the title of the article, not the URL!"
+      );
+    } else {
+      actions.setWord(localState.topic);
+      actions.setToast("Submitted topic!");
+    }
+  }
+
+  function startGame() {
+    const ready = state.playerState.every(
+      (player) => player.wordset || player.guessing
+    );
+
+    if (ready) {
+      actions.startRound();
+    } else {
+      actions.setError("Everyone needs to be ready!");
+    }
+  }
+
+  function playerClick(player: PlayerState) {
+    return () => {
+      if (state.stage !== RoundProgression.INVESTIGATION) return;
+      if (player.guessing) return;
+      if (!state.guessing) return;
+
+      actions.guessPlayer(player.id);
+    };
+  }
+
+  const investigator = state.playerState.find((player) => player.guessing);
 
   return (
     <Fragment>
@@ -40,7 +97,19 @@ export default () => {
         <header className="green">
           {state.host ? (
             <Fragment>
-              <button className="white txt-green small">Start Round</button>
+              {state.stage === RoundProgression.RESEARCH ? (
+                <button className="white txt-green small" onClick={startGame}>
+                  Start Round
+                </button>
+              ) : (
+                <button
+                  className="white txt-green small"
+                  onClick={actions.reset}
+                >
+                  Reset Game
+                </button>
+              )}
+
               <button
                 className="white txt-green small"
                 onClick={actions.bootInactive}
@@ -53,16 +122,52 @@ export default () => {
           )}
         </header>
 
+        {state.stage === RoundProgression.INVESTIGATION && state.guessing ? (
+          <p>
+            When you think you know who is telling the truth, you can tap their
+            name to select them. If you guess correctly, you'll be awarded a
+            point!
+          </p>
+        ) : (
+          <Fragment>
+            {state.stage === RoundProgression.INVESTIGATION &&
+            state.selectedWord === state.ownWord ? (
+              <p>
+                Your word has been choosen! You now have to convince{" "}
+                {investigator?.name} of the truth! If they pick you, you'll be
+                awarded a point!
+              </p>
+            ) : null}
+
+            {state.stage === RoundProgression.INVESTIGATION &&
+            state.selectedWord !== state.ownWord ? (
+              <p>
+                Your word was not choosen! Now, you need to lie to{" "}
+                {investigator?.name} to try and convince them you know what
+                you're talking about. If you convince them successfully, then
+                you'll be awarded a point!
+              </p>
+            ) : null}
+          </Fragment>
+        )}
+
         <ul className="block">
           {state.playerState.map((player) => (
             <li
+              onClick={playerClick(player)}
               className={
-                state.guessing && state.stage === RoundProgression.INVESTIGATION
+                state.guessing &&
+                state.stage === RoundProgression.INVESTIGATION &&
+                !player.guessing
                   ? "clickable"
                   : ""
               }
             >
-              {player.name} {player.active ? null : "(inactive)"}
+              {player.name} {player.active ? null : "(inactive)"}{" "}
+              {player.host ? "(HOST)" : null}{" "}
+              {player.guessing ? "(INVESTIGATOR)" : null}
+              {" — "}
+              {state.points[player.id]} points
             </li>
           ))}
         </ul>
@@ -90,12 +195,21 @@ export default () => {
                 onInput={(ev) =>
                   setLocalState({ topic: ev.currentTarget.value })
                 }
-                onBlur={() => actions.setWord(localState.topic)}
               />
-              <button className="small purple">Set Topic</button>
+              <button className="small purple" onClick={() => validateWord()}>
+                Set Topic
+              </button>
             </div>
           </Fragment>
-        ) : null}
+        ) : (
+          <Fragment>
+            <h3>You are the investigator!</h3>
+            <p>
+              When the round starts, it will be your job to talk to every other
+              player and determine who is telling the truth, and who is lying
+            </p>
+          </Fragment>
+        )}
       </div>
     </Fragment>
   );
