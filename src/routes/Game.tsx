@@ -154,6 +154,7 @@ export default () => {
         <ul className="block">
           {state.playerState.map((player) => (
             <li
+              key={player.id}
               onClick={playerClick(player)}
               className={
                 state.guessing &&
@@ -192,7 +193,7 @@ export default () => {
                 aria-label="Set your topic here"
                 placeholder="Your Topic"
                 value={localState.topic}
-                onInput={(ev) =>
+                onChange={(ev) =>
                   setLocalState({ topic: ev.currentTarget.value })
                 }
               />
