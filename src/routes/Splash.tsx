@@ -87,6 +87,7 @@ export default ({ code, enteringCode }: SplashScreenProps) => {
             value={localState.code}
             placeholder="Game Code"
             aria-label="The game code"
+            autoFocus
             onChange={(ev) =>
               setLocalState({
                 ...localState,
