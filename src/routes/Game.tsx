@@ -52,6 +52,10 @@ export default () => {
   }
 
   function validateWord() {
+    if (state.stage !== RoundProgression.RESEARCH) {
+      return;
+    }
+
     const topic = localState.topic;
 
     if (topic.length < 3) {
@@ -212,13 +216,21 @@ export default () => {
                 aria-label="Set your topic here"
                 placeholder="Your Topic"
                 autoFocus
+                disabled={state.stage !== RoundProgression.RESEARCH}
                 value={localState.topic}
                 onChange={(ev) =>
                   setLocalState({ topic: ev.currentTarget.value })
                 }
                 onKeyDown={(ev) => (ev.keyCode === 13 ? validateWord() : null)}
               />
-              <button className="small purple" onClick={() => validateWord()}>
+              <button
+                className={
+                  state.stage === RoundProgression.RESEARCH
+                    ? "small purple"
+                    : "small purple disabled"
+                }
+                onClick={() => validateWord()}
+              >
                 Set Topic
               </button>
             </div>
