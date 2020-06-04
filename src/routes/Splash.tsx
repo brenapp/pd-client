@@ -81,6 +81,9 @@ export default ({ code, enteringCode }: SplashScreenProps) => {
           placeholder="Nickname"
           aria-label="Set your nickname"
           autoFocus
+          onKeyDown={(ev) =>
+            ev.keyCode === 13 && localState.enteringCode ? handleJoin(ev) : null
+          }
           onChange={(ev) =>
             setLocalState({
               ...localState,
@@ -96,7 +99,7 @@ export default ({ code, enteringCode }: SplashScreenProps) => {
             value={localState.code}
             placeholder="Game Code"
             aria-label="The game code"
-            autoFocus
+            autoFocus={!code}
             inputMode="numeric"
             ref={(input) => (codeInput = input)}
             onKeyDown={(ev) => (ev.keyCode === 13 ? handleJoin(ev) : null)}
