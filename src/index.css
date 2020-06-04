@@ -23,7 +23,7 @@ html {
   --purple-1: #786fa6;
   --purple-2: #9b59b6;
   --gray-1: #4f4f4f;
-  --gray-2: #afafaf;
+  --gray-2: #979797;
   --gray-3: #efefef;
   --red-1: #ff7979;
   --white: #fff;
@@ -212,10 +212,15 @@ a.button.small {
 }
 
 button:active,
-button.disabled,
-a.button:active,
-a.button.disabled {
+a.button:active {
   background-color: var(--gray-1);
+}
+
+button.disabled,
+a.button {
+  background-color: var(--gray-2) !important;
+  cursor: not-allowed;
+  color: var(--gray-1) !important;
 }
 
 button.purple,
@@ -304,6 +309,11 @@ input.green {
 input.green::placeholder {
   color: var(--green-1);
   font-weight: normal;
+}
+
+input[disabled] {
+  border-bottom: 3px solid var(--gray-2) !important;
+  cursor: not-allowed;
 }
 
 div.formgroup {
