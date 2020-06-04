@@ -25,8 +25,10 @@ function App() {
 
   // Handle connections
   if (state.position === "game") {
-    navigate("/game");
-  } else {
+    navigate(`/game`);
+  }
+
+  if (state.position === "lobby" && path.startsWith("/game")) {
     navigate("/");
   }
 
