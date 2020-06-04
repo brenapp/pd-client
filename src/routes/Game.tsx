@@ -152,30 +152,31 @@ export default () => {
         )}
 
         <ul className="block">
-          {state.playerState.map((player) => (
-            <li
-              key={player.id}
-              onClick={playerClick(player)}
-              onKeyPress={(ev) =>
-                ev.key === "Enter" ? playerClick(player)() : null
-              }
-              role="button"
-              tabIndex={0}
-              className={
-                state.guessing &&
-                state.stage === RoundProgression.INVESTIGATION &&
-                !player.guessing
-                  ? "clickable"
-                  : ""
-              }
-            >
-              {player.name} {player.active ? null : "(inactive)"}{" "}
-              {player.host ? "(HOST)" : null}{" "}
-              {player.guessing ? "(INVESTIGATOR)" : null}
-              {" — "}
-              {state.points[player.id]} points
-            </li>
-          ))}
+          {state.playerState.map((player) => {
+            const clickable =
+              state.guessing &&
+              state.stage === RoundProgression.INVESTIGATION &&
+              !player.guessing;
+
+            return (
+              <li
+                key={player.id}
+                onClick={playerClick(player)}
+                onKeyPress={(ev) =>
+                  ev.key === "Enter" ? playerClick(player)() : null
+                }
+                // Only advertise it as focusable to screen readers if there is an action
+                {...(clickable ? { role: "button", tabIndex: 0 } : {})}
+                className={clickable ? "clickable" : ""}
+              >
+                {player.name} {player.active ? null : "(inactive)"}{" "}
+                {player.host ? "(HOST)" : null}{" "}
+                {player.guessing ? "(INVESTIGATOR)" : null}
+                {" — "}
+                {state.points[player.id]} points
+              </li>
+            );
+          })}
         </ul>
         {!state.guessing ? (
           <Fragment>
