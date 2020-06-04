@@ -156,6 +156,11 @@ export default () => {
             <li
               key={player.id}
               onClick={playerClick(player)}
+              onKeyPress={(ev) =>
+                ev.key === "Enter" ? playerClick(player)() : null
+              }
+              role="button"
+              tabIndex={0}
               className={
                 state.guessing &&
                 state.stage === RoundProgression.INVESTIGATION &&
@@ -192,10 +197,12 @@ export default () => {
                 type="text"
                 aria-label="Set your topic here"
                 placeholder="Your Topic"
+                autoFocus
                 value={localState.topic}
                 onChange={(ev) =>
                   setLocalState({ topic: ev.currentTarget.value })
                 }
+                onKeyDown={(ev) => (ev.keyCode === 13 ? validateWord() : null)}
               />
               <button className="small purple" onClick={() => validateWord()}>
                 Set Topic
