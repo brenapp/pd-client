@@ -87,6 +87,16 @@ export default () => {
 
   const investigator = state.playerState.find((player) => player.guessing);
 
+  // If the user's word got picked, then reset it to nothing
+  if (
+    localState.topic &&
+    state.ownWord === state.selectedWord &&
+    (state.stage === RoundProgression.GUESS_CORRECT ||
+      state.stage === RoundProgression.GUESS_INCORRECT)
+  ) {
+    setLocalState({ topic: "" });
+  }
+
   return (
     <Fragment>
       <h3 className="subtitle center">{subtitle}</h3>
