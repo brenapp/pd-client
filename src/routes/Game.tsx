@@ -1,9 +1,12 @@
 import React, { Fragment, useState } from "react";
 import useGameState, { RoundProgression, PlayerState } from "../services/game";
+import { useTitle } from "hookrouter";
 
 export default () => {
   const [state, actions] = useGameState();
   const [localState, setLocalState] = useState({ topic: "" });
+
+  useTitle(`PD — ${state.name} — ${state.gameCode}`);
 
   // Set the title
   let title;

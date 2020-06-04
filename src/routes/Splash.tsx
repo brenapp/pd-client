@@ -4,6 +4,7 @@
 
 import React, { Fragment, useState } from "react";
 import useGameState from "../services/game";
+import { useTitle } from "hookrouter";
 
 export interface SplashScreenProps {
   code?: string;
@@ -17,6 +18,8 @@ export default ({ code, enteringCode }: SplashScreenProps) => {
     enteringCode,
     name: gameState.name,
   });
+
+  useTitle("PD — Lobby");
 
   function handleJoin(e: any) {
     e.preventDefault();
