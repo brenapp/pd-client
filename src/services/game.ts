@@ -330,7 +330,7 @@ const initalState: GameState = {
 
 export const socket = new WebSocket(
   process.env["NODE_ENV"] === "production"
-    ? "wss://pd-api.bren.app:8888"
+    ? "wss://pd-api.bren.app"
     : "ws://192.168.1.15:8888"
 );
 
